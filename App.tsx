@@ -5,6 +5,10 @@ import { View, Text, StyleSheet } from 'react-native';
 import SignupScreen from './src/screens/signup_screen/SignupScreen';
 import HomeScreen from './src/screens/home_screen/HomeScreen';
 import LoginScreen from './src/screens/login_screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { NativeBaseProvider, Box } from "native-base";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +23,7 @@ const App = () => {
           component={SignupScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+          <Stack.Screen
           name="Home"
           component={HomeScreen}
           options={{ headerShown: false }} 

@@ -1,34 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const LoginScreen = () => {
-    
-        const navigation = useNavigation();
+    const navigation = useNavigation();
 
-        const [email, setEmail] = useState('');
-        const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-        const handleLogin = async () => {
-            try {
-                const response = await axios.post('http://10.0.2.2:3000/login', {
-                  email,
-                  password,
-                });
-                if (response.data.error) {
-                    Alert.alert('Error', response.data.error);
-                  } else {
-                    console.log("Logged in successfully!")
-                    navigation.navigate('Home');
-                  }
-                } catch (error) {
-                  console.log('Error:', error);
-                  Alert.alert('Invalid username or password! Please try again.');
-                }
-        };
+    const checkLoginStatus = async () => {
+        try {
+            const value = await AsyncStorage.getItem('isLoggedIn');
+            setIsLoggedIn(value === '1');
+        } catch (error) {
+            console.error('Error checking login status:', error);
+        }
+    };
 
+    useEffect(() => {
+        checkLoginStatus();
+    }, []);
+
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post('http://10.0.2.2:3000/login', {
+                email,
+                password,
+            });
+
+            if (response.data.error) {
+                Alert.alert('Error', response.data.error);
+            } else {
+                setIsLoggedIn(true);
+                navigation.navigate('Home');
+            }
+        } catch (error) {
+            console.log('Error:', error);
+            Alert.alert('Invalid email or password');
+        }
+    };
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Login</Text>
