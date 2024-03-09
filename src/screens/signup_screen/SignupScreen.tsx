@@ -57,7 +57,7 @@ const SignupScreen = () => {
       }
     } catch (error) {
       console.log('Error:', error);
-      Alert.alert('An error occurred. Please try again.');
+      Alert.alert('Email already exists! Please use a different email.');
     };
   };
 
@@ -85,10 +85,7 @@ const SignupScreen = () => {
         onChangeText={handlePasswordChange}
       />
       <Button title="Sign Up" onPress={handleSignup} />
-        <Text style={styles.line_space}>Already have an account?<Text> </Text><Text>Login</Text></Text>
-        {/* <TouchableOpacity onPress={handleLogin}>
-        <Text>Press Here</Text>
-      </TouchableOpacity> */}
+        <Text style={styles.line_space}>Already have an account?<Text> </Text><Text onPress={handleLogin}>Login</Text></Text>
     </View>
   );
 };
@@ -98,6 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 100,
     padding: 20,
+    alignItems: 'center',
   },
   text: {
     fontSize: 24,
@@ -114,7 +112,6 @@ const styles = StyleSheet.create({
   },
   line_space: {
     marginTop: 20,
-    marginLeft: 60,
   },
 });
 

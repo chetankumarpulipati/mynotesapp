@@ -25,16 +25,12 @@ app.get('/', (req, res) => {
 
   app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
-  
-    // Create new user
     const user = new User({ username, email, password });
-  
-    // Save user to database
     try {
       await user.save();
       res.send({ message: 'User registered successfully' });
     } catch (error) {
-      if (error.code === 11000) { // This is the error code for a duplication error
+      if (error.code === 11000) { 
         res.status(400).send({ error: 'Email already taken' });
       } else {
         console.error(error);
@@ -42,6 +38,20 @@ app.get('/', (req, res) => {
       }
     }
   });
+
+  app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    const user = await User
+      .findOne({ email });  
+    if (!user) {
+      return res.status(404).send({ error: 'User not found' });
+    }
+    if (user.password !== password) {
+      return res.status(401).send({ error: 'Incorrect password' });
+    }
+    res.send({ message: 'User logged in' });
+  }
+  );
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
