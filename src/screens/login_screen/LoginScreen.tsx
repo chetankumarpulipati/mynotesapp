@@ -60,6 +60,7 @@ const LoginScreen = () => {
                 secureTextEntry
             />
             <Button title="Login" onPress={handleLogin} />
+            {/* <Button title="Home" onPress={() => navigation.navigate('Home')} /> */}
             <Text style={styles.line_space}>Don't have an account?<Text> </Text><Text onPress={() => navigation.navigate('Signup')}>Sign Up</Text></Text>
         </View>
     );
