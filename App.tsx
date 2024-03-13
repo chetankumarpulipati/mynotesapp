@@ -9,6 +9,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { NativeBaseProvider, Box } from "native-base";
+import AddNotes from './src/screens/add_notes/AddNotes';
+import { NotesProvider, useNotes } from './src/context/NotesContext'; // Import NotesProvider and useNotes
 
 const Stack = createNativeStackNavigator();
 
@@ -16,25 +18,32 @@ const App = () => {
   const [signedUp, setSignedUp] = React.useState(false);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Signup"
-          component={SignupScreen}
-          options={{ headerShown: false }}
-        />
+    <NotesProvider {...{}}>
+      <NavigationContainer>
+        <Stack.Navigator>
           <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ headerShown: false }} 
+            name="Signup"
+            component={SignupScreen}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+            name="Home"
+            component={HomeScreen}
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AddNotes"
+            component={AddNotes}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </NotesProvider>
   );
 };
 
