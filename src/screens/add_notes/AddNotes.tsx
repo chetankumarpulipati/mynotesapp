@@ -1,28 +1,61 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import { useNotes } from '../../context/NotesContext';
+import axios from 'axios';
 
 const AddNotes = () => {
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const [category, setCategory] = useState('');
-  const [customCategory, setCustomCategory] = useState('');
+  var [title, setTitle] = useState('');
+  var [body, setBody] = useState('');
+  var [category, setCategory] = useState('');
+  var [customCategory, setCustomCategory] = useState('');
   const { addNote } = useNotes();
   const navigation = useNavigation();
 
-  const handleSaveNote = () => {
-    console.log('Title:', title);
-    console.log('Body:', body);
-    console.log('Category:', customCategory || category);
-    addNote(title, body, customCategory || category);
-    setTitle('');
-    setBody('');
-    setCategory('');
-    setCustomCategory('');
-    navigation.navigate('Home'); // Navigate back to the Home screen after saving the note
+  const handleSaveNote = async () => {
+    if (title.trim() === '') {
+      title = 'Untitled';
+    } 
+    if (body.trim() === '') {
+      body = 'No body';
+    }
+    if (category === 'custom' && customCategory.trim() === '') {
+      customCategory = 'Other';
+    }
+    try {
+      const response = await axios.post('http://10.0.2.2:3000/notes', {
+        title,
+        body,
+        category
+      });
+  
+      console.log(response.data.message); // Log the response
+  
+      if (response.data.error) {
+        Alert.alert(response.data.error);
+      } else {
+        console.log(`title: "${title}"`);
+        console.log(`body: "${body}"`);
+        console.log(`category: "${category}"`);
+        
+        // Add the note only if there's no error in the response
+        addNote(title, body, customCategory || category);
+        
+        // Reset the form fields
+        setTitle('');
+        setBody('');
+        setCategory('');
+        setCustomCategory('');
+  
+        // Navigate to the Home screen
+        navigation.navigate('Home');
+      }
+    } catch (error: any) {
+      console.error('Error saving note:', error.response?.data?.error || error.message);
+    }
   };
+  
 
   return (
     <View style={styles.container}>
