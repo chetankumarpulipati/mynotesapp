@@ -86,7 +86,7 @@ const SignupScreen = () => {
       />
       <Button title="Sign Up" onPress={handleSignup} />
         <Text style={styles.line_space}>Already have an account?<Text> </Text><Text onPress={handleLogin}>Login</Text></Text>
-        {/* <Button title="Home" onPress={() => navigation.navigate('Home')} /> */}
+        <Button title="Home" onPress={() => navigation.navigate('Home')} />
     </View>
   );
 };

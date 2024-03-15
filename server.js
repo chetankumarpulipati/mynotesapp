@@ -36,6 +36,7 @@ const noteSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema); // Corrected model name
 const Note = mongoose.model('Note', noteSchema); // Corrected model name
 
+
 app.get('/', (req, res) => {
   res.send('Server is running');
 });
@@ -83,7 +84,15 @@ app.post('/notes', async (req, res) => {
     }
   }
 });
-
+app.get('/notes/:id', async (req, res) => {
+  try {
+      const note = await Note.findById(req.params.id);
+      res.status(200).send(note);
+  } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: 'Failed to fetch note' });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

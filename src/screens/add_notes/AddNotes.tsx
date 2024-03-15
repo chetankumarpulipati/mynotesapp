@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useNotes } from '../../context/NotesContext';
 import axios from 'axios';
 
+
 const AddNotes = () => {
   var [title, setTitle] = useState('');
   var [body, setBody] = useState('');
@@ -73,11 +74,25 @@ const AddNotes = () => {
         onChangeText={setBody}
         multiline
       />
-      <Picker
+       <Picker
         selectedValue={category}
         style={styles.picker}
         onValueChange={(itemValue, itemIndex) => setCategory(itemValue)}>
         <Picker.Item label="Select category" value="" />
+        <Picker.Item label="Work" value="work" />
+        <Picker.Item label="Personal" value="personal" />
+        <Picker.Item label="Family" value="family" />
+        <Picker.Item label="Friends" value="friends" />
+        <Picker.Item label="Health" value="health" />
+        <Picker.Item label="Finance" value="finance" />
+        <Picker.Item label="Education" value="education" />
+        <Picker.Item label="Entertainment" value="entertainment" />
+        <Picker.Item label="Travel" value="travel" />
+        <Picker.Item label="Food" value="food" />
+        <Picker.Item label="Shopping" value="shopping" />
+        <Picker.Item label="Sports" value="sports" />
+        <Picker.Item label="Technology" value="technology" />
+        <Picker.Item label="Science" value="science" />
         <Picker.Item label="Other" value="custom" />
       </Picker>
       {category === 'custom' && (

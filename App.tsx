@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
 import { NativeBaseProvider, Box } from "native-base";
 import AddNotes from './src/screens/add_notes/AddNotes';
 import { NotesProvider, useNotes } from './src/context/NotesContext'; // Import NotesProvider and useNotes
+import NotesScreen from './src/screens/notes_screen/NotesScreen';
+import EditNotes from './src/screens/edit_notes';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +41,16 @@ const App = () => {
           <Stack.Screen
             name="AddNotes"
             component={AddNotes}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Notes"
+            component={NotesScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditNotes"
+            component={EditNotes}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,15 +9,24 @@ import {
   ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {NotesContext} from '../../context/NotesContext'; // Import NotesContext
-
-export {NotesContext} from '../../context/NotesContext'; // Export NotesContext
+import {NotesContext} from '../../context/NotesContext';
+export {NotesContext} from '../../context/NotesContext';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const {notes} = useContext(NotesContext); // Access notes from NotesContext
+  const {notes} = useContext(NotesContext);
+
   function AddNewNotes() {
     navigation.navigate('AddNotes');
+  }
+
+  function EditNotes(noteId) {
+    fetch('http://10.0.2.2:3000/notes/' + noteId)
+      .then(response => response.json())
+      .then(note => {
+        navigation.navigate('EditNotes', {note: note});
+      })
+      .catch(error => console.error(error));
   }
 
   return (
@@ -30,22 +39,23 @@ const HomeScreen = () => {
         />
       </TouchableOpacity>
       <ScrollView>
-      <View style={styles.notesContainer}>
-        {notes.map((note, index) => (
-          <View key={index}>
-            <TouchableOpacity>
-              <View style={styles.note}>
-                <Text style={styles.title}>{note.title}</Text>
-                <Text style={styles.body}>{note.body}</Text>
-                <View style={styles.categoryContainer}>
-                  <Text style={styles.categoryLabel}>Category: </Text>
-                  <Text style={styles.category}>{note.category}</Text>
+        <View style={styles.notesContainer}>
+          {notes.map((note, index) => (
+            <View key={index}>
+              {/* <TouchableOpacity onPress={EditNotes}> */}
+              <TouchableOpacity key={index} onPress={() => EditNotes(note)}>
+                <View style={styles.note}>
+                  <Text style={styles.title}>{note.title}</Text>
+                  <Text style={styles.body}>{note.body}</Text>
+                  <View style={styles.categoryContainer}>
+                    <Text style={styles.categoryLabel}>Category: </Text>
+                    <Text style={styles.category}>{note.category}</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </View>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
