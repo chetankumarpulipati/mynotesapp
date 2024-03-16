@@ -12,85 +12,99 @@ mongoose.connect('mongodb://localhost:27017/myapp', {
   useUnifiedTopology: true,
 });
 
-const userSchema = new mongoose.Schema({
-  username: String,
-  email: { type: String, unique: true },
-  password: String,
-});
-
 const noteSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   body: {
     type: String,
-    required: true
+    required: true,
   },
   category: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
-const User = mongoose.model('User', userSchema); // Corrected model name
 const Note = mongoose.model('Note', noteSchema); // Corrected model name
+const jwt = require('jsonwebtoken');
 
+const userSchema = new mongoose.Schema({
+  username: String,
+  email: {type: String, unique: true},
+  password: String, 
+});
+
+
+const User = mongoose.model('User', userSchema); // Corrected model name
+module.exports = User;
 
 app.get('/', (req, res) => {
   res.send('Server is running');
 });
 
 app.post('/register', async (req, res) => {
-  const { username, email, password } = req.body;
-  const user = new User({ username, email, password });
+  const {username, email, password} = req.body;
+  const user = new User({username, email, password});
   try {
     await user.save();
-    res.send({ message: 'User registered successfully' });
+    res.send({message: 'User registered successfully'});
   } catch (error) {
     if (error.code === 11000) {
-      res.status(400).send({ error: 'Email already taken' });
+      res.status(400).send({error: 'Email already taken'});
     } else {
       console.error(error);
-      res.status(500).send({ error: 'Failed to register user' });
+      res.status(500).send({error: 'Failed to register user'});
     }
   }
 });
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) {
-    return res.status(404).send({ error: 'User not found' });
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).send({ error: 'User not found' });
+    }
+    // Compare the provided password with the stored password (plaintext)
+    if (user.password !== password) {
+      return res.status(401).send({ error: 'Incorrect password' });
+    }
+    // User is authenticated, generate a token
+    const token = jwt.sign({ id: user._id }, '99638134709963813470');
+    // Send the token to the client
+    res.send({ message: 'User logged in', token });
+  } catch (error) {
+    console.error('Error logging in:', error);
+    res.status(500).send({ error: 'Internal server error' });
   }
-  if (user.password !== password) {
-    return res.status(401).send({ error: 'Incorrect password' });
-  }
-  res.send({ message: 'User logged in' });
 });
 
+
+
 app.post('/notes', async (req, res) => {
-  const { title, body, category } = req.body;
-  const note = new Note({ title, body, category }); // Corrected model name
+  const {title, body, category} = req.body;
+  const note = new Note({title, body, category}); // Corrected model name
   try {
     await note.save();
-    res.send({ message: 'Note created successfully' });
+    res.send({message: 'Note created successfully'});
   } catch (error) {
     if (error.code === 11000) {
-      res.status(400).send({ error: 'Note already exists' });
+      res.status(400).send({error: 'Note already exists'});
     } else {
       console.error(error);
-      res.status(500).send({ error: 'Failed to create note' });
+      res.status(500).send({error: 'Failed to create note'});
     }
   }
 });
 app.get('/notes/:id', async (req, res) => {
   try {
-      const note = await Note.findById(req.params.id);
-      res.status(200).send(note);
+    const note = await Note.findById(req.params.id);
+    res.status(200).send(note);
   } catch (error) {
-      console.error(error);
-      res.status(500).send({ error: 'Failed to fetch note' });
+    console.error(error);
+    res.status(500).send({error: 'Failed to fetch note'});
   }
 });
 

@@ -28,15 +28,15 @@ const SignupScreen = () => {
   const handleSignup = async () => {
     // Check if username, email, or password is empty
     if (!username) {
-      Alert.alert('Please enter username');
+      Alert.alert('Error','Please enter username');
       return;
     }
     if (!email) {
-      Alert.alert('Please enter email');
+      Alert.alert('Error','Please enter email');
       return;
     }
     if (!password) {
-      Alert.alert('Please enter password');
+      Alert.alert('Error','Please enter password');
       return;
     }
   

@@ -24,18 +24,18 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Signup"
-            component={SignupScreen}
+            name="Login"
+            component={LoginScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
+        <Stack.Screen
             name="Home"
             component={HomeScreen}
             options={{ headerShown: false }} 
           />
           <Stack.Screen
-            name="Login"
-            component={LoginScreen}
+            name="Signup"
+            component={SignupScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen

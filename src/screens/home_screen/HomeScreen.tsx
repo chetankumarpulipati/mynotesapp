@@ -29,6 +29,10 @@ const HomeScreen = () => {
       .catch(error => console.error(error));
   }
 
+  function LogoutButton(){
+    <Text>Logout BUtton</Text>
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Notes App</Text>
@@ -121,6 +125,23 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  logout_btn: {
+    backgroundColor: '#2196F3',
+    borderRadius: 20, 
+    padding: 20,
+    marginLeft: 315,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 450,
+    marginRight: 100,
+  },
+  logout_img: {
+    width: 30,
+    height: 30,
+    tintColor: '#fff',
+    zIndex: 1,
   },
 });
 
