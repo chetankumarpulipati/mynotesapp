@@ -28,6 +28,12 @@
   <ul>1. NPM - Node Package Manager</ul>
   <ul>2. React Native CLI</ul>
 </p>
+<h2>Features: </h2>
+<p>
+<ul>1. Note Creation and Management</ul>
+<ul>2. Organization</ul>
+<ul>3. Integration</ul>
+</p>
 <h2>How to run the app?</h2>
 <p>
   <ul>1. Clone the Repository</ul>
